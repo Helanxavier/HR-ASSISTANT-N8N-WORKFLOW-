@@ -1,0 +1,351 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "HR  Polices",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "hrpolicy",
+              "fieldType": "file",
+              "multipleFiles": false,
+              "acceptFileTypes": ".pdf"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -512,
+        -144
+      ],
+      "id": "78ba8842-a2ac-48d5-b85b-df77204825ad",
+      "name": "On form submission",
+      "webhookId": "b41bc28f-7880-4853-b923-752d4f55ef5f"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "n8ndemo",
+          "mode": "list",
+          "cachedResultName": "n8ndemo"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        -304,
+        -144
+      ],
+      "id": "3c8175ca-c4f9-46e0-b844-13b30a3523ea",
+      "name": "Pinecone Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "5OfnvU8JAz6rDSFs",
+          "name": "PineconeApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "binaryMode": "specificField",
+        "loader": "pdfLoader",
+        "binaryDataKey": "hrpolicy",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        -176,
+        64
+      ],
+      "id": "b0f9555a-f9bb-4774-8a71-bf184fe0c8f4",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "modelName": "embed-english-light-v2.0"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsCohere",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        64
+      ],
+      "id": "730b1e50-f7b6-4ca3-b7f9-21005ea150b5",
+      "name": "Embeddings Cohere",
+      "credentials": {
+        "cohereApi": {
+          "id": "xMfEqHBhAu4U6jCX",
+          "name": "CohereApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi there! I'm Hellan!\nHow can I assist you today?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -624,
+        240
+      ],
+      "id": "f5a8ab5f-3391-4252-9f05-8a2fed525dfa",
+      "name": "When chat message received",
+      "webhookId": "bce88041-d9ed-4c59-a301-d8770dc50e4d"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        -336,
+        240
+      ],
+      "id": "422fa44b-0e79-4d7b-99f9-b6ff1c3fa0f3",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatCohere",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        496
+      ],
+      "id": "0068e892-4212-44a4-ab42-239fc9cee312",
+      "name": "Cohere Chat Model",
+      "credentials": {
+        "cohereApi": {
+          "id": "xMfEqHBhAu4U6jCX",
+          "name": "CohereApi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -336,
+        496
+      ],
+      "id": "50745653-a33a-40d6-9373-a8e2dcee0df5",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "description": "use this tool to answer related to the hr policies"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        432
+      ],
+      "id": "9e9e27d2-64c8-4ed6-aa00-87af685dc80a",
+      "name": "Answer questions with a vector store"
+    },
+    {
+      "parameters": {
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "n8ndemo",
+          "mode": "list",
+          "cachedResultName": "n8ndemo"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        -176,
+        624
+      ],
+      "id": "fe8aa3c1-f767-41b1-af3d-056c91903e8b",
+      "name": "Pinecone Vector Store1",
+      "credentials": {
+        "pineconeApi": {
+          "id": "5OfnvU8JAz6rDSFs",
+          "name": "PineconeApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "embed-english-light-v2.0"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsCohere",
+      "typeVersion": 1,
+      "position": [
+        -144,
+        816
+      ],
+      "id": "733c7342-9f34-4c33-90b1-6c5af45b7552",
+      "name": "Embeddings Cohere1",
+      "credentials": {
+        "cohereApi": {
+          "id": "xMfEqHBhAu4U6jCX",
+          "name": "CohereApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatCohere",
+      "typeVersion": 1,
+      "position": [
+        240,
+        640
+      ],
+      "id": "db9fc514-3e78-4c29-9e65-a92c62507238",
+      "name": "Cohere Chat Model1",
+      "credentials": {
+        "cohereApi": {
+          "id": "xMfEqHBhAu4U6jCX",
+          "name": "CohereApi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Cohere": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cohere Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Answer questions with a vector store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store1": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Answer questions with a vector store",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Cohere1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cohere Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Answer questions with a vector store",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "eaa8dc8b-d1c4-44dc-8824-728c6de98504",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e034c99fa496bcc3fe773377f2f417bb039e6bc3d4a0f9d0587deaad2b58e82b"
+  },
+  "id": "NJ2vjJESqsbEg550",
+  "tags": []
+}
